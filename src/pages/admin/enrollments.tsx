@@ -107,6 +107,8 @@ export default function AdminEnrollmentsPage() {
   const handleEnroll = () => {
     if (!formStudent?.length || !formCourse) return;
     enroll(formStudent, formCourse);
+    setFormStudent([]);
+    setFormCourse(null);
     setEnrollDialogOpen(false);
   };
 

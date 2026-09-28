@@ -75,6 +75,9 @@ export default function AdminCoursesPage() {
   const handleEnroll = () => {
     if (!formCourseCode || !formCourseTitle) return;
     newCourse(formCourseCode, formCourseTitle, formInstructor);
+    setFormCourseCode(null);
+      setFormCourseTitle(null);
+      setFormInstructor([]);
     setEnrollDialogOpen(false);
   };
 
