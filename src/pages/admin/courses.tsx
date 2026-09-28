@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/table";
 import { useEnrollmentStore } from "@/lib/enrollment-store";
 import { useState } from "react";
-import {  FieldDescription } from "@/components/ui/field";
+import { FieldDescription } from "@/components/ui/field";
 import { Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -56,8 +56,22 @@ export default function AdminCoursesPage() {
   const [formCourseCode, setFormCourseCode] = useState<string | null>(null);
   const [formCourseTitle, setFormCourseTitle] = useState<string | null>(null);
   const [formInstructor, setFormInstructor] = useState<string[]>([]);
+  const [instructorQuery, setInstructorQuery] = useState("");
+  // const [instructorOptions, setInstructorOptions] =
+  //   useState<string[]>(allinstructor);
   const [enrollDialogOpen, setEnrollDialogOpen] = useState(false);
   const anchor = useComboboxAnchor();
+
+  const trimmed = instructorQuery.trim();
+  const canCreate =
+    trimmed.length > 0 &&
+    !formInstructor.some((i) => i.toLowerCase() === trimmed.toLowerCase());
+
+  const handleAddInstructor = () => {
+    //setInstructorOptions((prev) => [...prev, trimmed]);
+    setFormInstructor((prev) => [...prev, trimmed]); // เลือกให้เลยหลังเพิ่ม
+    setInstructorQuery("");
+  };
 
   const handleEnroll = () => {
     if (!formCourseCode || !formCourseTitle) return;
@@ -147,6 +161,8 @@ export default function AdminCoursesPage() {
                   items={allinstructor}
                   value={formInstructor}
                   onValueChange={(v) => setFormInstructor(v as string[])}
+                  inputValue={instructorQuery}
+                  onInputValueChange={setInstructorQuery}
                 >
                   <ComboboxChips
                     ref={anchor}
@@ -170,7 +186,6 @@ export default function AdminCoursesPage() {
                     </ComboboxValue>
                   </ComboboxChips>
                   <ComboboxContent anchor={anchor}>
-                    <ComboboxEmpty>No items found.</ComboboxEmpty>
                     <ComboboxList>
                       {(item) => (
                         <ComboboxItem key={item} value={item}>
@@ -178,6 +193,18 @@ export default function AdminCoursesPage() {
                         </ComboboxItem>
                       )}
                     </ComboboxList>
+                    {canCreate && (
+                      <div className="border-t p-1">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start"
+                          onClick={handleAddInstructor}
+                        >+เพิ่มผู้สอน "{trimmed}"
+                        </Button>
+                      </div>
+                    )}
                   </ComboboxContent>
                 </Combobox>
               </div>
